@@ -1,0 +1,72 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "plugin:import/recommended",
+    "plugin:jest/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 2022,
+    "project": ["./tsconfig.json"]
+  },
+  "env": {
+    "node": true,
+    "es2022": true
+  },
+  "rules": {
+    "object-shorthand": "error",
+    "no-duplicate-imports": "error",
+    "import/no-unresolved": [
+      "error",
+      {
+        "ignore": [
+          "contentlayer/generated",
+          "contentlayer/source-files",
+          "next-contentlayer/hooks"
+        ]
+      }
+    ],
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          ["parent", "sibling"],
+          "index",
+          "object",
+          "type"
+        ],
+        "newlines-between": "always",
+        "distinctGroup": false
+      }
+    ],
+    "@typescript-eslint/consistent-type-imports": [
+      "error",
+      {
+        "prefer": "type-imports",
+        "fixStyle": "inline-type-imports"
+      }
+    ],
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "varsIgnorePattern": "^_"
+      }
+    ]
+  },
+  "settings": {
+    "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true
+      },
+      "node": {
+        "extensions": [".ts", ".js", ".json"]
+      }
+    }
+  }
+}

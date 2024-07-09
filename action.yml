@@ -1,0 +1,6 @@
+name: "FlyCI Wingman"
+description: "Automatically Fix Your Failing CI Builds"
+
+runs:
+  using: "node20"
+  main: "dist/index.js"
