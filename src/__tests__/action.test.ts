@@ -1,4 +1,4 @@
-import { setSecret, info, setFailed } from "@actions/core";
+import { setSecret, info, setFailed, notice } from "@actions/core";
 
 import { getAccessToken } from "../utils";
 import { generateSuggestions } from "../suggestions";
@@ -9,6 +9,7 @@ jest.mock("@actions/core", () => ({
   info: jest.fn(),
   setFailed: jest.fn(),
   setSecret: jest.fn(),
+  notice: jest.fn(),
 }));
 
 jest.mock("../wingman", () => ({
@@ -27,10 +28,6 @@ jest.mock("../suggestions", () => ({
 
 describe("wingman action run", () => {
   const mockGetAccessToken = getAccessToken as jest.Mock;
-  const mockGenerateSuggestions = generateSuggestions as jest.Mock;
-  const mockSetSecret = setSecret as jest.Mock;
-  const mockInfo = info as jest.Mock;
-  const mockSetFailed = setFailed as jest.Mock;
   const mockDownloadWingmanClient = WingmanClient.download as jest.Mock;
 
   const mockWingmanRun = jest.fn();
@@ -49,21 +46,28 @@ describe("wingman action run", () => {
 
     await run();
 
+    expect(notice).toHaveBeenCalledExactlyOnceWith(
+      "FlyCI Wingman Action uses a generative AI to fix your build errors by creating suggestions to your pull requests. Join our Discord Community at https://discord.com/invite/JyCjh439da to get help, request features, and share feedback. Alternatively, send us an email at support@flyci.net.",
+      {
+        title: "FlyCI Wingman Notice",
+      },
+    );
+
     expect(mockGetAccessToken).toHaveBeenCalledOnce();
 
-    expect(mockSetSecret).toHaveBeenCalledAfter(mockGetAccessToken);
-    expect(mockSetSecret).toHaveBeenCalledExactlyOnceWith(accessToken);
+    expect(setSecret).toHaveBeenCalledAfter(mockGetAccessToken);
+    expect(setSecret).toHaveBeenCalledExactlyOnceWith(accessToken);
 
     expect(mockDownloadWingmanClient).toHaveBeenCalledExactlyOnceWith(
       accessToken,
     );
 
-    expect(mockGenerateSuggestions).toHaveBeenCalledExactlyOnceWith(
+    expect(generateSuggestions).toHaveBeenCalledExactlyOnceWith(
       accessToken,
       resultFilePath,
     );
 
-    expect(mockInfo).toHaveBeenLastCalledWith("Success!");
+    expect(info).toHaveBeenLastCalledWith("Success!");
   });
 
   it("when unable to obtain access token  should set action as failed", async () => {
@@ -71,7 +75,7 @@ describe("wingman action run", () => {
 
     await run();
 
-    expect(mockSetFailed).toHaveBeenCalledExactlyOnceWith(
+    expect(setFailed).toHaveBeenCalledExactlyOnceWith(
       'Wingman: Encountered an expected error "Unable to obtain Wingman access token"',
     );
   });
