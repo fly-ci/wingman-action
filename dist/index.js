@@ -18899,10 +18899,10 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
       command_1.issueCommand("warning", utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
     }
     exports2.warning = warning;
-    function notice(message, properties = {}) {
+    function notice2(message, properties = {}) {
       command_1.issueCommand("notice", utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
     }
-    exports2.notice = notice;
+    exports2.notice = notice2;
     function info2(message) {
       process.stdout.write(message + os2.EOL);
     }
@@ -22080,8 +22080,16 @@ var generateSuggestions = async (accessToken, wingmanResultPath) => {
 };
 
 // src/action.ts
+var DISCORD_CHANNEL_URL = "https://discord.com/invite/JyCjh439da";
+var FLYCI_SUPPORT_EMAIL = "support@flyci.net";
 var run = async () => {
   try {
+    (0, import_core.notice)(
+      `FlyCI Wingman Action uses a generative AI to fix your build errors by creating suggestions to your pull requests. Join our Discord Community at ${DISCORD_CHANNEL_URL} to get help, request features, and share feedback. Alternatively, send us an email at ${FLYCI_SUPPORT_EMAIL}.`,
+      {
+        title: "FlyCI Wingman Notice"
+      }
+    );
     (0, import_core.info)("Obtaining Wingman access token...");
     const accessToken = await getAccessToken();
     (0, import_node_assert4.default)(accessToken, "Unable to obtain Wingman access token");

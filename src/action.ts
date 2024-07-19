@@ -1,13 +1,22 @@
 import assert from "node:assert";
 
-import { info, setFailed, setSecret } from "@actions/core";
+import { info, setFailed, setSecret, notice } from "@actions/core";
 
 import { WingmanClient } from "./wingman";
 import { getAccessToken } from "./utils";
 import { generateSuggestions } from "./suggestions";
 
+const DISCORD_CHANNEL_URL = "https://discord.com/invite/JyCjh439da";
+const FLYCI_SUPPORT_EMAIL = "support@flyci.net";
+
 export const run = async (): Promise<void> => {
   try {
+    notice(
+      `FlyCI Wingman Action uses a generative AI to fix your build errors by creating suggestions to your pull requests. Join our Discord Community at ${DISCORD_CHANNEL_URL} to get help, request features, and share feedback. Alternatively, send us an email at ${FLYCI_SUPPORT_EMAIL}.`,
+      {
+        title: "FlyCI Wingman Notice",
+      },
+    );
     info("Obtaining Wingman access token...");
     const accessToken = await getAccessToken();
 
