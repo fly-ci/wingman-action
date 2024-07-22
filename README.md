@@ -20,6 +20,8 @@ Please refer to the [release page](https://github.com/fly-ci/wingman-action/rele
 
 ## Usage
 
+Add `fly-ci/wingman-action` to your workflow job as the **last step**:
+
 ```yaml
 - uses: fly-ci/wingman-action@main
   if: failure()
@@ -40,6 +42,40 @@ For this to work, you have to grant `id-token: write` permission to the job:
 permissions:
   id-token: write
   contents: read
+```
+
+### Example
+
+```diff
+name: CI
+
+on:
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: flyci-macos-14-m2
+
++   permissions:
++     id-token: write
++     contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run CI scripts
+        run: npm run ci
+
++     - uses: fly-ci/wingman-action@main
++       if: failure()
 ```
 
 ### Supported Runners
