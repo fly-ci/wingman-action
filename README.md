@@ -54,7 +54,7 @@ on:
 
 jobs:
   ci:
-    runs-on: flyci-macos-14-m2
+    runs-on: ubuntu-latest
 
 +   permissions:
 +     id-token: write
@@ -69,7 +69,7 @@ jobs:
           node-version-file: ".nvmrc"
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Run CI scripts
         run: npm run ci
@@ -82,11 +82,11 @@ jobs:
 
 Currently, the action is compatible with both self-hosted and GitHub-hosted runners meeting the following criteria:
 
-| Operating System | Architectures |                      Respective <br/> GitHub-hosted runners |
-| :--------------- | :------------ | ----------------------------------------------------------: |
-| macOS            | arm64         | _macos-latest <br/> macos-14 <br/> macos-13 <br/> macos-12_ |
-| ubuntu           | x64           |       _ubuntu-latest <br/> ubuntu-22.04 <br/> ubuntu-20.04_ |
-| windows          | x64           |      _windows-latest <br/> windows-2022 <br/> windows-2019_ |
+| Operating System | Architectures |                                                              Respective <br/> GitHub-hosted runners |
+| :--------------- | :------------ | --------------------------------------------------------------------------------------------------: |
+| macOS            | arm64         | _macos-latest <br/> macos-14 <br/> macos-latest-xlarge <br/> macos-14-xlarge <br/> macos-13-xlarge_ |
+| ubuntu           | x64           |                                               _ubuntu-latest <br/> ubuntu-22.04 <br/> ubuntu-20.04_ |
+| windows          | x64           |                                              _windows-latest <br/> windows-2022 <br/> windows-2019_ |
 
 _Note that while it should work on other Linux platforms running on x64 architectures, we do not guarantee that._
 
@@ -104,6 +104,6 @@ The scripts and documentation in this project are released under the [MIT Licens
 
 ## Feedback Channels
 
-If you would like to report a potential issue, get help, or recommend a feature, please join our [Discord Community](https://github.com/fly-ci/wingman-action/discussions).
+If you would like to report a potential issue, get help, or recommend a feature, please join our [Discord Community](https://discord.gg/JyCjh439da).
 
 Alternatively, send us an email at [support@flyci.net](mailto:support@flyci.net?subject=send-feedback).
