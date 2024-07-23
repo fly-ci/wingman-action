@@ -23,7 +23,7 @@ Please refer to the [release page](https://github.com/fly-ci/wingman-action/rele
 Add `fly-ci/wingman-action` to your workflow job as the **last step**:
 
 ```yaml
-- uses: fly-ci/wingman-action@main
+- uses: fly-ci/wingman-action@v1
   if: failure()
 ```
 
@@ -74,7 +74,7 @@ jobs:
       - name: Run CI scripts
         run: npm run ci
 
-+     - uses: fly-ci/wingman-action@main
++     - uses: fly-ci/wingman-action@v1
 +       if: failure()
 ```
 
