@@ -1,6 +1,10 @@
 name: "FlyCI Wingman"
 description: "Automatically Fix Your Failing CI Builds"
 
+branding:
+  icon: check-circle
+  color: purple
+
 runs:
   using: "node20"
   main: "dist/index.js"
