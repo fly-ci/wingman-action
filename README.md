@@ -31,12 +31,12 @@ Add `fly-ci/wingman-action` to your workflow job as the **last step**:
 
 #### FlyCI Application
 
-It's required to have [FlyCI app](https://github.com/apps/flyci-prod/installations/select_target) installed for the repo in order for the action to work.
+It's required to have the [FlyCI app](https://github.com/apps/flyci-prod/installations/select_target) installed for the corresponding repository for the action to work properly.
 
 #### Assign required permissions
 
 In order to get authenticated in front of the FlyCI API, the action has to obtain a short-lived access token using a GitHub OpenID Connect (OIDC) token.
-For this to work, you have to grant `id-token: write` permission to the job:
+To do so, it is required to grant `id-token: write` permission to the job:
 
 ```yaml
 permissions:
