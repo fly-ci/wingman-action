@@ -509,7 +509,7 @@ var require_file_command = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.prepareKeyValueMessage = exports2.issueFileCommand = void 0;
-    var fs3 = __importStar(require("fs"));
+    var fs4 = __importStar(require("fs"));
     var os2 = __importStar(require("os"));
     var uuid_1 = (init_esm_node(), __toCommonJS(esm_node_exports));
     var utils_1 = require_utils();
@@ -518,10 +518,10 @@ var require_file_command = __commonJS({
       if (!filePath) {
         throw new Error(`Unable to find environment variable for file command ${command}`);
       }
-      if (!fs3.existsSync(filePath)) {
+      if (!fs4.existsSync(filePath)) {
         throw new Error(`Missing file at path: ${filePath}`);
       }
-      fs3.appendFileSync(filePath, `${utils_1.toCommandValue(message)}${os2.EOL}`, {
+      fs4.appendFileSync(filePath, `${utils_1.toCommandValue(message)}${os2.EOL}`, {
         encoding: "utf8"
       });
     }
@@ -713,7 +713,7 @@ var require_tunnel = __commonJS({
         connectOptions.headers = connectOptions.headers || {};
         connectOptions.headers["Proxy-Authorization"] = "Basic " + new Buffer(connectOptions.proxyAuth).toString("base64");
       }
-      debug("making CONNECT request");
+      debug2("making CONNECT request");
       var connectReq = self.request(connectOptions);
       connectReq.useChunkedEncodingByDefault = false;
       connectReq.once("response", onResponse);
@@ -733,7 +733,7 @@ var require_tunnel = __commonJS({
         connectReq.removeAllListeners();
         socket.removeAllListeners();
         if (res.statusCode !== 200) {
-          debug(
+          debug2(
             "tunneling socket could not be established, statusCode=%d",
             res.statusCode
           );
@@ -745,7 +745,7 @@ var require_tunnel = __commonJS({
           return;
         }
         if (head.length > 0) {
-          debug("got illegal response body from proxy");
+          debug2("got illegal response body from proxy");
           socket.destroy();
           var error = new Error("got illegal response body from proxy");
           error.code = "ECONNRESET";
@@ -753,13 +753,13 @@ var require_tunnel = __commonJS({
           self.removeSocket(placeholder);
           return;
         }
-        debug("tunneling connection has established");
+        debug2("tunneling connection has established");
         self.sockets[self.sockets.indexOf(placeholder)] = socket;
         return cb(socket);
       }
       function onError(cause) {
         connectReq.removeAllListeners();
-        debug(
+        debug2(
           "tunneling socket could not be established, cause=%s\n",
           cause.message,
           cause.stack
@@ -821,9 +821,9 @@ var require_tunnel = __commonJS({
       }
       return target;
     }
-    var debug;
+    var debug2;
     if (process.env.NODE_DEBUG && /\btunnel\b/.test(process.env.NODE_DEBUG)) {
-      debug = function() {
+      debug2 = function() {
         var args = Array.prototype.slice.call(arguments);
         if (typeof args[0] === "string") {
           args[0] = "TUNNEL: " + args[0];
@@ -833,10 +833,10 @@ var require_tunnel = __commonJS({
         console.error.apply(console, args);
       };
     } else {
-      debug = function() {
+      debug2 = function() {
       };
     }
-    exports2.debug = debug;
+    exports2.debug = debug2;
   }
 });
 
@@ -18887,10 +18887,10 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
       return process.env["RUNNER_DEBUG"] === "1";
     }
     exports2.isDebug = isDebug;
-    function debug(message) {
+    function debug2(message) {
       command_1.issueCommand("debug", {}, message);
     }
-    exports2.debug = debug;
+    exports2.debug = debug2;
     function error(message, properties = {}) {
       command_1.issueCommand("error", utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
     }
@@ -19024,12 +19024,12 @@ var require_io_util = __commonJS({
     var _a;
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.getCmdPath = exports2.tryGetExecutablePath = exports2.isRooted = exports2.isDirectory = exports2.exists = exports2.READONLY = exports2.UV_FS_O_EXLOCK = exports2.IS_WINDOWS = exports2.unlink = exports2.symlink = exports2.stat = exports2.rmdir = exports2.rm = exports2.rename = exports2.readlink = exports2.readdir = exports2.open = exports2.mkdir = exports2.lstat = exports2.copyFile = exports2.chmod = void 0;
-    var fs3 = __importStar(require("fs"));
+    var fs4 = __importStar(require("fs"));
     var path = __importStar(require("path"));
-    _a = fs3.promises, exports2.chmod = _a.chmod, exports2.copyFile = _a.copyFile, exports2.lstat = _a.lstat, exports2.mkdir = _a.mkdir, exports2.open = _a.open, exports2.readdir = _a.readdir, exports2.readlink = _a.readlink, exports2.rename = _a.rename, exports2.rm = _a.rm, exports2.rmdir = _a.rmdir, exports2.stat = _a.stat, exports2.symlink = _a.symlink, exports2.unlink = _a.unlink;
+    _a = fs4.promises, exports2.chmod = _a.chmod, exports2.copyFile = _a.copyFile, exports2.lstat = _a.lstat, exports2.mkdir = _a.mkdir, exports2.open = _a.open, exports2.readdir = _a.readdir, exports2.readlink = _a.readlink, exports2.rename = _a.rename, exports2.rm = _a.rm, exports2.rmdir = _a.rmdir, exports2.stat = _a.stat, exports2.symlink = _a.symlink, exports2.unlink = _a.unlink;
     exports2.IS_WINDOWS = process.platform === "win32";
     exports2.UV_FS_O_EXLOCK = 268435456;
-    exports2.READONLY = fs3.constants.O_RDONLY;
+    exports2.READONLY = fs4.constants.O_RDONLY;
     function exists(fsPath) {
       return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -19983,15 +19983,15 @@ var require_exec = __commonJS({
 var require_semver = __commonJS({
   "node_modules/semver/semver.js"(exports2, module2) {
     exports2 = module2.exports = SemVer;
-    var debug;
+    var debug2;
     if (typeof process === "object" && process.env && process.env.NODE_DEBUG && /\bsemver\b/i.test(process.env.NODE_DEBUG)) {
-      debug = function() {
+      debug2 = function() {
         var args = Array.prototype.slice.call(arguments, 0);
         args.unshift("SEMVER");
         console.log.apply(console, args);
       };
     } else {
-      debug = function() {
+      debug2 = function() {
       };
     }
     exports2.SEMVER_SPEC_VERSION = "2.0.0";
@@ -20109,7 +20109,7 @@ var require_semver = __commonJS({
     tok("STAR");
     src[t.STAR] = "(<|>)?=?\\s*\\*";
     for (i = 0; i < R; i++) {
-      debug(i, src[i]);
+      debug2(i, src[i]);
       if (!re[i]) {
         re[i] = new RegExp(src[i]);
         safeRe[i] = new RegExp(makeSafeRe(src[i]));
@@ -20176,7 +20176,7 @@ var require_semver = __commonJS({
       if (!(this instanceof SemVer)) {
         return new SemVer(version2, options);
       }
-      debug("SemVer", version2, options);
+      debug2("SemVer", version2, options);
       this.options = options;
       this.loose = !!options.loose;
       var m = version2.trim().match(options.loose ? safeRe[t.LOOSE] : safeRe[t.FULL]);
@@ -20223,7 +20223,7 @@ var require_semver = __commonJS({
       return this.version;
     };
     SemVer.prototype.compare = function(other) {
-      debug("SemVer.compare", this.version, this.options, other);
+      debug2("SemVer.compare", this.version, this.options, other);
       if (!(other instanceof SemVer)) {
         other = new SemVer(other, this.options);
       }
@@ -20250,7 +20250,7 @@ var require_semver = __commonJS({
       do {
         var a = this.prerelease[i2];
         var b = other.prerelease[i2];
-        debug("prerelease compare", i2, a, b);
+        debug2("prerelease compare", i2, a, b);
         if (a === void 0 && b === void 0) {
           return 0;
         } else if (b === void 0) {
@@ -20272,7 +20272,7 @@ var require_semver = __commonJS({
       do {
         var a = this.build[i2];
         var b = other.build[i2];
-        debug("prerelease compare", i2, a, b);
+        debug2("prerelease compare", i2, a, b);
         if (a === void 0 && b === void 0) {
           return 0;
         } else if (b === void 0) {
@@ -20532,7 +20532,7 @@ var require_semver = __commonJS({
         return new Comparator(comp, options);
       }
       comp = comp.trim().split(/\s+/).join(" ");
-      debug("comparator", comp, options);
+      debug2("comparator", comp, options);
       this.options = options;
       this.loose = !!options.loose;
       this.parse(comp);
@@ -20541,7 +20541,7 @@ var require_semver = __commonJS({
       } else {
         this.value = this.operator + this.semver.version;
       }
-      debug("comp", this);
+      debug2("comp", this);
     }
     var ANY = {};
     Comparator.prototype.parse = function(comp) {
@@ -20564,7 +20564,7 @@ var require_semver = __commonJS({
       return this.value;
     };
     Comparator.prototype.test = function(version2) {
-      debug("Comparator.test", version2, this.options.loose);
+      debug2("Comparator.test", version2, this.options.loose);
       if (this.semver === ANY || version2 === ANY) {
         return true;
       }
@@ -20657,9 +20657,9 @@ var require_semver = __commonJS({
       var loose = this.options.loose;
       var hr = loose ? safeRe[t.HYPHENRANGELOOSE] : safeRe[t.HYPHENRANGE];
       range = range.replace(hr, hyphenReplace);
-      debug("hyphen replace", range);
+      debug2("hyphen replace", range);
       range = range.replace(safeRe[t.COMPARATORTRIM], comparatorTrimReplace);
-      debug("comparator trim", range, safeRe[t.COMPARATORTRIM]);
+      debug2("comparator trim", range, safeRe[t.COMPARATORTRIM]);
       range = range.replace(safeRe[t.TILDETRIM], tildeTrimReplace);
       range = range.replace(safeRe[t.CARETTRIM], caretTrimReplace);
       range = range.split(/\s+/).join(" ");
@@ -20712,15 +20712,15 @@ var require_semver = __commonJS({
       });
     }
     function parseComparator(comp, options) {
-      debug("comp", comp, options);
+      debug2("comp", comp, options);
       comp = replaceCarets(comp, options);
-      debug("caret", comp);
+      debug2("caret", comp);
       comp = replaceTildes(comp, options);
-      debug("tildes", comp);
+      debug2("tildes", comp);
       comp = replaceXRanges(comp, options);
-      debug("xrange", comp);
+      debug2("xrange", comp);
       comp = replaceStars(comp, options);
-      debug("stars", comp);
+      debug2("stars", comp);
       return comp;
     }
     function isX(id) {
@@ -20734,7 +20734,7 @@ var require_semver = __commonJS({
     function replaceTilde(comp, options) {
       var r = options.loose ? safeRe[t.TILDELOOSE] : safeRe[t.TILDE];
       return comp.replace(r, function(_, M, m, p2, pr) {
-        debug("tilde", comp, _, M, m, p2, pr);
+        debug2("tilde", comp, _, M, m, p2, pr);
         var ret;
         if (isX(M)) {
           ret = "";
@@ -20743,12 +20743,12 @@ var require_semver = __commonJS({
         } else if (isX(p2)) {
           ret = ">=" + M + "." + m + ".0 <" + M + "." + (+m + 1) + ".0";
         } else if (pr) {
-          debug("replaceTilde pr", pr);
+          debug2("replaceTilde pr", pr);
           ret = ">=" + M + "." + m + "." + p2 + "-" + pr + " <" + M + "." + (+m + 1) + ".0";
         } else {
           ret = ">=" + M + "." + m + "." + p2 + " <" + M + "." + (+m + 1) + ".0";
         }
-        debug("tilde return", ret);
+        debug2("tilde return", ret);
         return ret;
       });
     }
@@ -20758,10 +20758,10 @@ var require_semver = __commonJS({
       }).join(" ");
     }
     function replaceCaret(comp, options) {
-      debug("caret", comp, options);
+      debug2("caret", comp, options);
       var r = options.loose ? safeRe[t.CARETLOOSE] : safeRe[t.CARET];
       return comp.replace(r, function(_, M, m, p2, pr) {
-        debug("caret", comp, _, M, m, p2, pr);
+        debug2("caret", comp, _, M, m, p2, pr);
         var ret;
         if (isX(M)) {
           ret = "";
@@ -20774,7 +20774,7 @@ var require_semver = __commonJS({
             ret = ">=" + M + "." + m + ".0 <" + (+M + 1) + ".0.0";
           }
         } else if (pr) {
-          debug("replaceCaret pr", pr);
+          debug2("replaceCaret pr", pr);
           if (M === "0") {
             if (m === "0") {
               ret = ">=" + M + "." + m + "." + p2 + "-" + pr + " <" + M + "." + m + "." + (+p2 + 1);
@@ -20785,7 +20785,7 @@ var require_semver = __commonJS({
             ret = ">=" + M + "." + m + "." + p2 + "-" + pr + " <" + (+M + 1) + ".0.0";
           }
         } else {
-          debug("no pr");
+          debug2("no pr");
           if (M === "0") {
             if (m === "0") {
               ret = ">=" + M + "." + m + "." + p2 + " <" + M + "." + m + "." + (+p2 + 1);
@@ -20796,12 +20796,12 @@ var require_semver = __commonJS({
             ret = ">=" + M + "." + m + "." + p2 + " <" + (+M + 1) + ".0.0";
           }
         }
-        debug("caret return", ret);
+        debug2("caret return", ret);
         return ret;
       });
     }
     function replaceXRanges(comp, options) {
-      debug("replaceXRanges", comp, options);
+      debug2("replaceXRanges", comp, options);
       return comp.split(/\s+/).map(function(comp2) {
         return replaceXRange(comp2, options);
       }).join(" ");
@@ -20810,7 +20810,7 @@ var require_semver = __commonJS({
       comp = comp.trim();
       var r = options.loose ? safeRe[t.XRANGELOOSE] : safeRe[t.XRANGE];
       return comp.replace(r, function(ret, gtlt, M, m, p2, pr) {
-        debug("xRange", comp, ret, gtlt, M, m, p2, pr);
+        debug2("xRange", comp, ret, gtlt, M, m, p2, pr);
         var xM = isX(M);
         var xm = xM || isX(m);
         var xp = xm || isX(p2);
@@ -20854,12 +20854,12 @@ var require_semver = __commonJS({
         } else if (xp) {
           ret = ">=" + M + "." + m + ".0" + pr + " <" + M + "." + (+m + 1) + ".0" + pr;
         }
-        debug("xRange return", ret);
+        debug2("xRange return", ret);
         return ret;
       });
     }
     function replaceStars(comp, options) {
-      debug("replaceStars", comp, options);
+      debug2("replaceStars", comp, options);
       return comp.trim().replace(safeRe[t.STAR], "");
     }
     function hyphenReplace($0, from, fM, fm, fp, fpr, fb, to, tM, tm, tp, tpr, tb) {
@@ -20911,7 +20911,7 @@ var require_semver = __commonJS({
       }
       if (version2.prerelease.length && !options.includePrerelease) {
         for (i2 = 0; i2 < set.length; i2++) {
-          debug(set[i2].semver);
+          debug2(set[i2].semver);
           if (set[i2].semver === ANY) {
             continue;
           }
@@ -21189,7 +21189,7 @@ var require_manifest = __commonJS({
     var core_1 = require_core();
     var os2 = require("os");
     var cp = require("child_process");
-    var fs3 = require("fs");
+    var fs4 = require("fs");
     function _findMatch(versionSpec, stable, candidates, archFilter) {
       return __awaiter(this, void 0, void 0, function* () {
         const platFilter = os2.platform();
@@ -21253,10 +21253,10 @@ var require_manifest = __commonJS({
       const lsbReleaseFile = "/etc/lsb-release";
       const osReleaseFile = "/etc/os-release";
       let contents = "";
-      if (fs3.existsSync(lsbReleaseFile)) {
-        contents = fs3.readFileSync(lsbReleaseFile).toString();
-      } else if (fs3.existsSync(osReleaseFile)) {
-        contents = fs3.readFileSync(osReleaseFile).toString();
+      if (fs4.existsSync(lsbReleaseFile)) {
+        contents = fs4.readFileSync(lsbReleaseFile).toString();
+      } else if (fs4.existsSync(osReleaseFile)) {
+        contents = fs4.readFileSync(osReleaseFile).toString();
       }
       return contents;
     }
@@ -21501,7 +21501,7 @@ var require_tool_cache = __commonJS({
     exports2.evaluateVersions = exports2.isExplicitVersion = exports2.findFromManifest = exports2.getManifestFromRepo = exports2.findAllVersions = exports2.find = exports2.cacheFile = exports2.cacheDir = exports2.extractZip = exports2.extractXar = exports2.extractTar = exports2.extract7z = exports2.downloadTool = exports2.HTTPError = void 0;
     var core2 = __importStar(require_core());
     var io = __importStar(require_io());
-    var fs3 = __importStar(require("fs"));
+    var fs4 = __importStar(require("fs"));
     var mm = __importStar(require_manifest());
     var os2 = __importStar(require("os"));
     var path = __importStar(require("path"));
@@ -21549,7 +21549,7 @@ var require_tool_cache = __commonJS({
     exports2.downloadTool = downloadTool2;
     function downloadToolAttempt(url, dest, auth, headers) {
       return __awaiter(this, void 0, void 0, function* () {
-        if (fs3.existsSync(dest)) {
+        if (fs4.existsSync(dest)) {
           throw new Error(`Destination file path ${dest} already exists`);
         }
         const http = new httpm.HttpClient(userAgent, [], {
@@ -21573,7 +21573,7 @@ var require_tool_cache = __commonJS({
         const readStream = responseMessageFactory();
         let succeeded = false;
         try {
-          yield pipeline(readStream, fs3.createWriteStream(dest));
+          yield pipeline(readStream, fs4.createWriteStream(dest));
           core2.debug("download complete");
           succeeded = true;
           return dest;
@@ -21785,11 +21785,11 @@ var require_tool_cache = __commonJS({
         arch = arch || os2.arch();
         core2.debug(`Caching tool ${tool} ${version2} ${arch}`);
         core2.debug(`source dir: ${sourceDir}`);
-        if (!fs3.statSync(sourceDir).isDirectory()) {
+        if (!fs4.statSync(sourceDir).isDirectory()) {
           throw new Error("sourceDir is not a directory");
         }
         const destPath = yield _createToolPath(tool, version2, arch);
-        for (const itemName of fs3.readdirSync(sourceDir)) {
+        for (const itemName of fs4.readdirSync(sourceDir)) {
           const s = path.join(sourceDir, itemName);
           yield io.cp(s, destPath, { recursive: true });
         }
@@ -21804,7 +21804,7 @@ var require_tool_cache = __commonJS({
         arch = arch || os2.arch();
         core2.debug(`Caching tool ${tool} ${version2} ${arch}`);
         core2.debug(`source file: ${sourceFile}`);
-        if (!fs3.statSync(sourceFile).isFile()) {
+        if (!fs4.statSync(sourceFile).isFile()) {
           throw new Error("sourceFile is not a file");
         }
         const destFolder = yield _createToolPath(tool, version2, arch);
@@ -21834,7 +21834,7 @@ var require_tool_cache = __commonJS({
         versionSpec = semver.clean(versionSpec) || "";
         const cachePath = path.join(_getCacheDirectory(), toolName, versionSpec, arch);
         core2.debug(`checking cache: ${cachePath}`);
-        if (fs3.existsSync(cachePath) && fs3.existsSync(`${cachePath}.complete`)) {
+        if (fs4.existsSync(cachePath) && fs4.existsSync(`${cachePath}.complete`)) {
           core2.debug(`Found tool in cache ${toolName} ${versionSpec} ${arch}`);
           toolPath = cachePath;
         } else {
@@ -21848,12 +21848,12 @@ var require_tool_cache = __commonJS({
       const versions = [];
       arch = arch || os2.arch();
       const toolPath = path.join(_getCacheDirectory(), toolName);
-      if (fs3.existsSync(toolPath)) {
-        const children = fs3.readdirSync(toolPath);
+      if (fs4.existsSync(toolPath)) {
+        const children = fs4.readdirSync(toolPath);
         for (const child of children) {
           if (isExplicitVersion(child)) {
             const fullPath = path.join(toolPath, child, arch || "");
-            if (fs3.existsSync(fullPath) && fs3.existsSync(`${fullPath}.complete`)) {
+            if (fs4.existsSync(fullPath) && fs4.existsSync(`${fullPath}.complete`)) {
               versions.push(child);
             }
           }
@@ -21927,7 +21927,7 @@ var require_tool_cache = __commonJS({
     function _completeToolPath(tool, version2, arch) {
       const folderPath = path.join(_getCacheDirectory(), tool, semver.clean(version2) || version2, arch || "");
       const markerPath = `${folderPath}.complete`;
-      fs3.writeFileSync(markerPath, "");
+      fs4.writeFileSync(markerPath, "");
       core2.debug("finished caching tool");
     }
     function isExplicitVersion(versionSpec) {
@@ -21985,6 +21985,7 @@ var require_tool_cache = __commonJS({
 
 // src/action.ts
 var import_node_assert4 = __toESM(require("node:assert"));
+var import_node_fs = __toESM(require("node:fs"));
 var import_core = __toESM(require_core());
 
 // src/wingman.ts
@@ -22098,6 +22099,10 @@ var run = async () => {
     const wingman = await WingmanClient.download(accessToken);
     (0, import_core.info)("Running Wingman...");
     const resultFilePath = await wingman.run();
+    if (!import_node_fs.default.existsSync(resultFilePath)) {
+      (0, import_core.debug)(`No Wingman output file at: ${resultFilePath}`);
+      return;
+    }
     (0, import_core.info)("Generating suggestions...");
     await generateSuggestions(accessToken, resultFilePath);
     (0, import_core.info)("Success!");

@@ -1,6 +1,7 @@
 import assert from "node:assert";
+import fs from "node:fs";
 
-import { info, setFailed, setSecret, notice } from "@actions/core";
+import { debug, info, setFailed, setSecret, notice } from "@actions/core";
 
 import { WingmanClient } from "./wingman";
 import { getAccessToken } from "./utils";
@@ -29,6 +30,11 @@ export const run = async (): Promise<void> => {
 
     info("Running Wingman...");
     const resultFilePath = await wingman.run();
+
+    if (!fs.existsSync(resultFilePath)) {
+      debug(`No Wingman output file at: ${resultFilePath}`);
+      return;
+    }
 
     info("Generating suggestions...");
     await generateSuggestions(accessToken, resultFilePath);

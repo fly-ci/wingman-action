@@ -1,11 +1,18 @@
-import { setSecret, info, setFailed, notice } from "@actions/core";
+import fs from "node:fs";
+
+import { setSecret, debug, info, setFailed, notice } from "@actions/core";
 
 import { getAccessToken } from "../utils";
 import { generateSuggestions } from "../suggestions";
 import { WingmanClient } from "../wingman";
 import { run } from "../action";
 
+jest.mock("node:fs", () => ({
+  existsSync: jest.fn(),
+}));
+
 jest.mock("@actions/core", () => ({
+  debug: jest.fn(),
   info: jest.fn(),
   setFailed: jest.fn(),
   setSecret: jest.fn(),
@@ -27,8 +34,9 @@ jest.mock("../suggestions", () => ({
 }));
 
 describe("wingman action run", () => {
-  const mockGetAccessToken = getAccessToken as jest.Mock;
+  const mockGetAccessToken = jest.mocked(getAccessToken);
   const mockDownloadWingmanClient = WingmanClient.download as jest.Mock;
+  const existsSyncMock = jest.mocked(fs.existsSync);
 
   const mockWingmanRun = jest.fn();
 
@@ -43,6 +51,8 @@ describe("wingman action run", () => {
     mockGetAccessToken.mockResolvedValueOnce(accessToken);
 
     mockWingmanRun.mockResolvedValueOnce(resultFilePath);
+
+    existsSyncMock.mockReturnValueOnce(true);
 
     await run();
 
@@ -62,6 +72,8 @@ describe("wingman action run", () => {
       accessToken,
     );
 
+    expect(existsSyncMock).toHaveBeenCalledExactlyOnceWith(resultFilePath);
+
     expect(generateSuggestions).toHaveBeenCalledExactlyOnceWith(
       accessToken,
       resultFilePath,
@@ -70,7 +82,26 @@ describe("wingman action run", () => {
     expect(info).toHaveBeenLastCalledWith("Success!");
   });
 
-  it("when unable to obtain access token  should set action as failed", async () => {
+  it("when Wingman successfully executed but there is no suggestions file should not fail and not generate suggestions", async () => {
+    const accessToken = "my-token";
+    const resultFilePath = "/wingman/result/file";
+
+    mockGetAccessToken.mockResolvedValueOnce(accessToken);
+
+    mockWingmanRun.mockResolvedValueOnce(resultFilePath);
+
+    existsSyncMock.mockReturnValueOnce(false);
+
+    await run();
+
+    expect(generateSuggestions).not.toHaveBeenCalled();
+    expect(info).not.toHaveBeenCalledWith("Success!");
+    expect(debug).toHaveBeenCalledExactlyOnceWith(
+      `No Wingman output file at: ${resultFilePath}`,
+    );
+  });
+
+  it("when unable to obtain access token should set action as failed", async () => {
     mockGetAccessToken.mockResolvedValueOnce(undefined);
 
     await run();
