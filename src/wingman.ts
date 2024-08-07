@@ -6,7 +6,7 @@ import fs from "node:fs/promises";
 import { exec } from "@actions/exec";
 import { downloadTool } from "@actions/tool-cache";
 
-import { getFlyCIUrl, getTempDir } from "./utils";
+import { getFlyCIUrl, getTempDir, getWingmanUrl } from "./utils";
 
 const getWingmanDestinationPath = (platform: string) => {
   return p.format({
@@ -43,7 +43,7 @@ export class WingmanClient {
   run = async () => {
     const env = {
       ...process.env,
-      LLM_SERVER_URL: getFlyCIUrl(),
+      LLM_SERVER_URL: getWingmanUrl(),
       LLM_API_KEY: this.accessToken,
       FLYCI_WINGMAN_OUTPUT_FILE: p.join(getTempDir(), "wingman.json"),
     };

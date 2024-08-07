@@ -6,7 +6,7 @@ import { downloadTool } from "@actions/tool-cache";
 import { exec } from "@actions/exec";
 
 import { WingmanClient } from "../wingman";
-import { getFlyCIUrl } from "../utils";
+import { getFlyCIUrl, getWingmanUrl } from "../utils";
 
 jest.mock("@actions/tool-cache");
 jest.mock("@actions/exec");
@@ -75,7 +75,7 @@ describe("WingmanClient", () => {
 
       expect(exec).toHaveBeenCalledExactlyOnceWith(path, [], {
         env: expect.objectContaining({
-          LLM_SERVER_URL: getFlyCIUrl(),
+          LLM_SERVER_URL: getWingmanUrl(),
           LLM_API_KEY: accessToken,
           FLYCI_WINGMAN_OUTPUT_FILE: p.join(tmpPath, "wingman.json"),
         }),
