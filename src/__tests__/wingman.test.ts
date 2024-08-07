@@ -15,6 +15,7 @@ jest.mock("node:fs/promises");
 jest.mock("node:os");
 
 describe("WingmanClient", () => {
+  const wingmanUrlEnv = "INPUT_WINGMAN_URL";
   const tmpPath = "/tmp/path";
   const path = "/path/to/wingman";
   const accessToken = "secret-access-token";
@@ -66,6 +67,9 @@ describe("WingmanClient", () => {
   });
 
   describe("run", () => {
+    afterEach(() => {
+      delete process.env[wingmanUrlEnv];
+    });
     it("when wingman execution exits with non-zero exit code should throw error", async () => {
       mockExec.mockResolvedValueOnce(1);
 
@@ -78,6 +82,21 @@ describe("WingmanClient", () => {
           LLM_SERVER_URL: getWingmanUrl(),
           LLM_API_KEY: accessToken,
           FLYCI_WINGMAN_OUTPUT_FILE: p.join(tmpPath, "wingman.json"),
+        }),
+      });
+    });
+
+    it("when wingman url input is set should use it", async () => {
+      process.env[wingmanUrlEnv] = "mock-url";
+      mockExec.mockResolvedValueOnce(0);
+
+      const wingman = await downloadWingman();
+
+      await wingman.run();
+
+      expect(exec).toHaveBeenCalledExactlyOnceWith(path, [], {
+        env: expect.objectContaining({
+          LLM_SERVER_URL: "mock-url",
         }),
       });
     });

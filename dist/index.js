@@ -22002,10 +22002,12 @@ var core = __toESM(require_core());
 var import_http_client = __toESM(require_lib());
 var import_auth = __toESM(require_auth());
 var FLYCI_URL = "https://api.flyci.net";
+var WINGMAN_URL = "https://wingman.flyci.net";
 var getFlyCIUrl = (path = "") => {
   const url = core.getInput("flyci-url") || FLYCI_URL;
   return `${url}${path}`;
 };
+var getWingmanUrl = () => core.getInput("wingman-url") || WINGMAN_URL;
 var getOidcToken = () => core.getIDToken(getFlyCIUrl());
 var getAccessToken = async () => {
   const oidcToken = await getOidcToken();
@@ -22051,7 +22053,7 @@ var WingmanClient = class _WingmanClient {
   run = async () => {
     const env = {
       ...process.env,
-      LLM_SERVER_URL: getFlyCIUrl(),
+      LLM_SERVER_URL: getWingmanUrl(),
       LLM_API_KEY: this.accessToken,
       FLYCI_WINGMAN_OUTPUT_FILE: import_node_path.default.join(getTempDir(), "wingman.json")
     };
