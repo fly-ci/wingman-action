@@ -15,7 +15,7 @@ jest.mock("node:fs/promises");
 jest.mock("node:os");
 
 describe("WingmanClient", () => {
-  const wingmanUrlEnv = "INPUT_WINGMAN_URL";
+  const wingmanUrlEnv = "INPUT_WINGMAN-URL";
   const tmpPath = "/tmp/path";
   const path = "/path/to/wingman";
   const accessToken = "secret-access-token";
