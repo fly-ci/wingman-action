@@ -5,12 +5,15 @@ import { HttpClient } from "@actions/http-client";
 import { BearerCredentialHandler } from "@actions/http-client/lib/auth";
 
 export const FLYCI_URL = "https://api.flyci.net";
+export const WINGMAN_URL = "https://wingman.flyci.net";
 
 export const getFlyCIUrl = (path: string = "") => {
   const url = core.getInput("flyci-url") || FLYCI_URL;
 
   return `${url}${path}`;
 };
+
+export const getWingmanUrl = () => core.getInput("wingman-url") || WINGMAN_URL;
 
 const getOidcToken = () => core.getIDToken(getFlyCIUrl());
 

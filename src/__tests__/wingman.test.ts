@@ -4,10 +4,13 @@ import fs from "node:fs/promises";
 
 import { downloadTool } from "@actions/tool-cache";
 import { exec } from "@actions/exec";
+import { getInput } from "@actions/core";
 
 import { WingmanClient } from "../wingman";
-import { getFlyCIUrl } from "../utils";
-
+import { getFlyCIUrl, getWingmanUrl } from "../utils";
+jest.mock("@actions/core", () => ({
+  getInput: jest.fn(),
+}));
 jest.mock("@actions/tool-cache");
 jest.mock("@actions/exec");
 
@@ -20,6 +23,7 @@ describe("WingmanClient", () => {
   const accessToken = "secret-access-token";
   const mockDownloadTool = downloadTool as jest.Mock;
   const mockExec = exec as jest.Mock;
+  const mockGetInput = getInput as jest.Mock;
 
   const downloadWingman = async () => {
     mockDownloadTool.mockResolvedValueOnce(path);
@@ -75,9 +79,26 @@ describe("WingmanClient", () => {
 
       expect(exec).toHaveBeenCalledExactlyOnceWith(path, [], {
         env: expect.objectContaining({
-          LLM_SERVER_URL: getFlyCIUrl(),
+          LLM_SERVER_URL: getWingmanUrl(),
           LLM_API_KEY: accessToken,
           FLYCI_WINGMAN_OUTPUT_FILE: p.join(tmpPath, "wingman.json"),
+        }),
+      });
+    });
+
+    it("when wingman url input is set should use it", async () => {
+      mockGetInput.mockReturnValue("mock-url");
+
+      mockExec.mockResolvedValueOnce(0);
+
+      const wingman = await downloadWingman();
+
+      await wingman.run();
+
+      expect(mockGetInput).toHaveBeenNthCalledWith(2, "wingman-url");
+      expect(exec).toHaveBeenCalledExactlyOnceWith(path, [], {
+        env: expect.objectContaining({
+          LLM_SERVER_URL: "mock-url",
         }),
       });
     });
