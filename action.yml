@@ -4,6 +4,9 @@ inputs:
   wingman-url:
     description: "The URL to use for Wingman"
     required: false
+  flyci-url:
+    description: "The URL to use for Wingman"
+    required: false
 branding:
   icon: check-circle
   color: purple

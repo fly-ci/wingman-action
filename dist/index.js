@@ -22051,6 +22051,7 @@ var WingmanClient = class _WingmanClient {
     return new _WingmanClient(path, accessToken);
   }
   run = async () => {
+    console.log("running");
     const env = {
       ...process.env,
       LLM_SERVER_URL: getWingmanUrl(),
