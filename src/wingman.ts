@@ -41,6 +41,7 @@ export class WingmanClient {
   }
 
   run = async () => {
+    console.log("running");
     const env = {
       ...process.env,
       LLM_SERVER_URL: getWingmanUrl(),

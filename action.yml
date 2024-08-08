@@ -2,7 +2,7 @@ name: "FlyCI Wingman"
 description: "Automatically Fix Your Failing CI Builds"
 inputs:
   wingman-url:
-    description: 'The URL to use for Wingman'
+    description: "The URL to use for Wingman"
     required: false
 branding:
   icon: check-circle
