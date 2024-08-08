@@ -4,10 +4,13 @@ import fs from "node:fs/promises";
 
 import { downloadTool } from "@actions/tool-cache";
 import { exec } from "@actions/exec";
+import { getInput } from "@actions/core";
 
 import { WingmanClient } from "../wingman";
 import { getFlyCIUrl, getWingmanUrl } from "../utils";
-
+jest.mock("@actions/core", () => ({
+  getInput: jest.fn(),
+}));
 jest.mock("@actions/tool-cache");
 jest.mock("@actions/exec");
 
@@ -15,12 +18,12 @@ jest.mock("node:fs/promises");
 jest.mock("node:os");
 
 describe("WingmanClient", () => {
-  const wingmanUrlEnv = "INPUT_WINGMAN-URL";
   const tmpPath = "/tmp/path";
   const path = "/path/to/wingman";
   const accessToken = "secret-access-token";
   const mockDownloadTool = downloadTool as jest.Mock;
   const mockExec = exec as jest.Mock;
+  const mockGetInput = getInput as jest.Mock;
 
   const downloadWingman = async () => {
     mockDownloadTool.mockResolvedValueOnce(path);
@@ -67,9 +70,6 @@ describe("WingmanClient", () => {
   });
 
   describe("run", () => {
-    afterEach(() => {
-      delete process.env[wingmanUrlEnv];
-    });
     it("when wingman execution exits with non-zero exit code should throw error", async () => {
       mockExec.mockResolvedValueOnce(1);
 
@@ -87,13 +87,15 @@ describe("WingmanClient", () => {
     });
 
     it("when wingman url input is set should use it", async () => {
-      process.env[wingmanUrlEnv] = "mock-url";
+      mockGetInput.mockReturnValue("mock-url");
+
       mockExec.mockResolvedValueOnce(0);
 
       const wingman = await downloadWingman();
 
       await wingman.run();
 
+      expect(mockGetInput).toHaveBeenNthCalledWith(2, "wingman-url");
       expect(exec).toHaveBeenCalledExactlyOnceWith(path, [], {
         env: expect.objectContaining({
           LLM_SERVER_URL: "mock-url",
